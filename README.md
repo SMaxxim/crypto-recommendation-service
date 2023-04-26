@@ -19,6 +19,17 @@ it will be easier to add new cryptocurrencies and modify endpoints to use differ
 Moreover, it will be possible to add new cryptocurrencies without modifying the service itself.
 In fact, a database is used, because, for real use of service, information about other months seems to be 
 strictly required (2022 year wasn't good for cryptocurrencies)
+Database tables:
+- cryptos 
+
+  list of all supported cryptocurrencies
+
+  columns: symbol, name, description 
+- prices
+
+  prices of all cryptocurrencies
+
+  columns: symbol, price_timestamp, price_unix_timestamp, price 
 
 #### Database creation
 For the initial creation of the database, liquibase is used.

@@ -1,5 +1,6 @@
 ### API
 
+[API documentation](https://github.com/SMaxxim/crypto-recommendation-service/blob/main/api-documentation.md)
 
 ### Implementation details
 

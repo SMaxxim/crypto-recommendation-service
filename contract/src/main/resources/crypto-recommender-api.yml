@@ -1,0 +1,111 @@
+openapi: 3.0.2
+info:
+  title: Cryptocurrency Recommendation service
+  description: "Recommendation service for choosing best cryptocurrency to invest"
+  version: 0.0.1-SNAPSHOT
+paths:
+  /cryptos:
+    get:
+      summary: Get a descending sorted list of all the cryptos, comparing the normalized range
+      operationId: getCryptosList
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CryptosList'
+  /cryptos/{cryptoSymbol}:
+    get:
+      summary: Get cryptocurrency information (oldest/newest/min/max values) by cryptocurrency symbol
+      operationId: getCryptoInfoBySymbol
+      parameters:
+        - name: cryptoSymbol
+          in: path
+          description: 'The symbol of cryptocurrency that needs to be fetched'
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CryptoInfo'
+        404:
+          description: Cryptocurrency not found
+          content: {}
+  /recommendations:
+    get:
+      summary: Get the crypto with the highest normalized range for a specific day
+      operationId: getHighestRangeCryptoForDate
+      parameters:
+        - name: date
+          in: query
+          description: 'The date in YYYY-MM-DD format for which the crypto with the highest normalized range is to be retrieved'
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CryptoInfo'
+components:
+  schemas:
+    CryptosList:
+      type: array
+      items:
+        $ref: '#/components/schemas/CryptosListItem'
+    CryptosListItem:
+      type: object
+      properties:
+        symbol:
+          type: string
+          description: Symbol of cryptocurrency
+        name:
+          type: string
+          description: Name of cryptocurrency
+        normalizedRange:
+          type: number
+          description: Normalized range
+    CryptoInfo:
+      type: object
+      properties:
+        symbol:
+          type: string
+          description: Symbol of cryptocurrency
+        name:
+          type: string
+          description: Name of cryptocurrency
+        description:
+          type: string
+          description: Description of cryptocurrency
+        oldestDateTime:
+          type: string
+          format: 'date-time'
+          description: Oldest date-time of cryptocurrency in the period
+        newestDateTime:
+          type: string
+          format: 'date-time'
+          description: Newest date-time of cryptocurrency in the period
+        oldestPrice:
+          type: number
+          description: Oldest price of cryptocurrency in the period
+        newestPrice:
+          type: number
+          description: Newest price of cryptocurrency in the period
+        minPrice:
+          type: number
+          description: Minimal price of cryptocurrency in the period
+        maxPrice:
+          type: number
+          description: Maximal price of cryptocurrency in the period
+        normalizedRange:
+          type: number
+          description: Normalized range in the period ((max-min)/min)
+

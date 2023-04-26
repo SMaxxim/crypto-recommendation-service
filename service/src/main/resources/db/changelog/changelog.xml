@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet id="createDatabase" author="maxim_stepanov2@epam.com">
+        <createTable tableName="cryptos">
+            <column name="symbol" type="varchar">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+            <column name="description" type="varchar"/>
+        </createTable>
+        <createTable tableName="prices">
+            <column name="symbol" type="varchar">
+                <constraints foreignKeyName="fk_prices_symbol" references="cryptos(symbol)"/>
+            </column>
+            <column name="price_timestamp" type="datetime"/>
+            <column name="price_unix_timestamp" type="number"/>
+            <column name="price" type="number"/>
+        </createTable>
+        <createIndex indexName="idx_prices_timestamp" tableName="prices">
+            <column name="price_timestamp"/>
+        </createIndex>
+        <sql>
+            insert into cryptos (symbol, name, description) values ('BTC', 'Bitcoin', null);
+            insert into cryptos (symbol, name, description) values ('ETH', 'Ethereum', null);
+            insert into cryptos (symbol, name, description) values ('LTC', 'Litecoin', null);
+            insert into cryptos (symbol, name, description) values ('XRP', 'XRP Ripple', null);
+            insert into cryptos (symbol, name, description) values ('DOGE', 'Dogecoin', null);
+        </sql>
+        <loadData file="classpath:db/data/BTC_2022_01_values.csv" tableName="prices">
+            <column name="symbol" header="symbol" />
+            <column name="price_unix_timestamp" header="timestamp" type="number"/>
+            <column name="price" header="price" type="number"/>
+        </loadData>
+        <loadData file="classpath:db/data/ETH_2022_01_values.csv" tableName="prices">
+            <column name="symbol" header="symbol" />
+            <column name="price_unix_timestamp" header="timestamp" type="number"/>
+            <column name="price" header="price" type="number"/>
+        </loadData>
+        <loadData file="classpath:db/data/LTC_2022_01_values.csv" tableName="prices">
+            <column name="symbol" header="symbol" />
+            <column name="price_unix_timestamp" header="timestamp" type="number"/>
+            <column name="price" header="price" type="number"/>
+        </loadData>
+        <loadData file="classpath:db/data/XRP_2022_01_values.csv" tableName="prices">
+            <column name="symbol" header="symbol" />
+            <column name="price_unix_timestamp" header="timestamp" type="number"/>
+            <column name="price" header="price" type="number"/>
+        </loadData>
+        <loadData file="classpath:db/data/DOGE_2022_01_values.csv" tableName="prices">
+            <column name="symbol" header="symbol" />
+            <column name="price_unix_timestamp" header="timestamp" type="number"/>
+            <column name="price" header="price" type="number"/>
+        </loadData>
+        <sql>
+            update prices
+            set price_timestamp = to_timestamp(price_unix_timestamp/1000) AT TIME ZONE 'UTC'
+            where price_timestamp is null
+        </sql>
+    </changeSet>
+</databaseChangeLog>

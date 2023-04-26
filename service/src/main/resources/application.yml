@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/postgres
+    username: ${POSTGRES_USER:}
+    password: ${POSTGRES_PASSWORD:}
+  liquibase:
+    change-log: classpath:db/changelog/changelog.xml
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+bucket4j:
+  enabled: ${RATE_LIMIT_ENABLED:true}
+  filters:
+    - cache-name: buckets
+      url: .*
+      rate-limits:
+        - bandwidths:
+            - capacity: ${RATE_LIMIT_CAPACITY:10}
+              time: ${RATE_LIMIT_TIME:10}
+              unit: ${RATE_LIMIT_UNIT:seconds}
+  cache-to-use: jcache
+
+database:
+  startup:
+    timeout: ${DATABASE_STARTUP_TIMEOUT:60}
+    interval: ${DATABASE_STARTUP_INTERVAL:7}

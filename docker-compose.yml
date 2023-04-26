@@ -1,0 +1,22 @@
+version: '3'
+volumes:
+  data-volume: {}
+services:
+  postgres-service:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pwd
+    volumes:
+      - data-volume:/var/lib/postgres
+  crypto-recommender-service:
+    image: crypto-recommender
+    ports:
+      - "8080:8080"
+    environment:
+      - POSTGRES_HOST=postgres-service
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pwd
+    depends_on:
+      - postgres-service

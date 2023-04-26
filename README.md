@@ -1,4 +1,6 @@
-### API
+Technical task: Cryptocurrency recommendation service
+
+### REST API
 
 [API documentation](https://github.com/SMaxxim/crypto-recommendation-service/blob/main/api-documentation.md)
 

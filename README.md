@@ -1,4 +1,4 @@
-Technical task: Cryptocurrency recommendation service
+### Technical task: Cryptocurrency recommendation service
 
 ### REST API
 
